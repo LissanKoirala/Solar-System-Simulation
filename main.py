@@ -1,5 +1,8 @@
+from bdb import Breakpoint
 import pygame
 import math
+import time
+
 pygame.init()
 
 WIDTH, HEIGHT =  800, 800
@@ -168,12 +171,21 @@ def main():
 	bg_img = pygame.image.load('media/background1.jpg')
 	bg_img = pygame.transform.scale(bg_img,(800,800))
 
+
+
+	#f = open("just_with_lines.txt", "w")
+
+	#counter = 0
+ 
+	#list_of_times = []
+
 	while run:
 
 		clock.tick(1000)
-  
+
 		# WIN.fill((0, 0, 0))
 
+		# start = time.time()
 		WIN.blit(bg_img,(0,0))
 
 		for event in pygame.event.get():
@@ -183,15 +195,24 @@ def main():
 		for planet in planets:
 			planet.update_position(planets)
 			planet.draw(WIN)
-			
 
 		pygame.display.update()
+		# end = time.time()
 
+		#list_of_times.append(end-start)
 
-
+		# if counter > 30000:
+		# 	break
+		
+		# counter += 1
 
 
 	pygame.quit()
+	
+    # writing into file
+	# for i in list_of_times:
+	# 	f.write(str(i)+"\n")
 
+	# f.close()
 
 main()
