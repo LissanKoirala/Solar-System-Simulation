@@ -54,16 +54,18 @@ class Planet:
 		x = self.x * self.SCALE + WIDTH / 2
 		y = self.y * self.SCALE + HEIGHT / 2
 
-		if len(self.orbit) > 2:
-			updated_points = []
-			for point in self.orbit:
-				x, y = point
-				x = x * self.SCALE + WIDTH / 2
-				y = y * self.SCALE + HEIGHT / 2
-				updated_points.append((x, y))
+		# uncomment to draw lines, however, the program will run slower over time
+  
+		# if len(self.orbit) > 2:
+		# 	updated_points = []
+		# 	for point in self.orbit:
+		# 		x, y = point
+		# 		x = x * self.SCALE + WIDTH / 2
+		# 		y = y * self.SCALE + HEIGHT / 2
+		# 		updated_points.append((x, y))
 
-			# drawing the lines
-			pygame.draw.lines(win, self.color, False, updated_points, 2)
+		# 	# drawing the lines
+		# 	pygame.draw.lines(win, self.color, False, updated_points, 2)
 
 		# pygame.draw.circle(win, self.color, (x, y), self.radius)
 		# scale the image with self.radius
@@ -112,7 +114,7 @@ class Planet:
 def main():
 	run = True
 	clock = pygame.time.Clock()
-
+ 
 	sun = Planet(0, 0, 30, YELLOW, 1.98892 * 10**30) 
 	sun.sun = True
 
@@ -163,15 +165,15 @@ def main():
 	# planets = list of planets
 	planets = [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune,     comet_halley]
 
-
+	bg_img = pygame.image.load('media/background1.jpg')
+	bg_img = pygame.transform.scale(bg_img,(800,800))
 
 	while run:
 
-		clock.tick(60) # frame rate
+		clock.tick(1000)
+  
 		# WIN.fill((0, 0, 0))
 
-		bg_img = pygame.image.load('media/background1.jpg')
-		bg_img = pygame.transform.scale(bg_img,(800,800))
 		WIN.blit(bg_img,(0,0))
 
 		for event in pygame.event.get():
@@ -182,7 +184,7 @@ def main():
 			planet.update_position(planets)
 			planet.draw(WIN)
 			
-		
+
 		pygame.display.update()
 
 
