@@ -167,7 +167,7 @@ def main():
 
 	while run:
 
-		clock.tick(1000) # frame rate
+		clock.tick(60) # frame rate
 		# WIN.fill((0, 0, 0))
 
 		bg_img = pygame.image.load('media/background1.jpg')
