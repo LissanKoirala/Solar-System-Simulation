@@ -59,16 +59,16 @@ class Planet:
 
 		# uncomment to draw lines, however, the program will run slower over time
   
-		# if len(self.orbit) > 2:
-		# 	updated_points = []
-		# 	for point in self.orbit:
-		# 		x, y = point
-		# 		x = x * self.SCALE + WIDTH / 2
-		# 		y = y * self.SCALE + HEIGHT / 2
-		# 		updated_points.append((x, y))
+		if len(self.orbit) > 2:
+			updated_points = []
+			for point in self.orbit:
+				x, y = point
+				x = x * self.SCALE + WIDTH / 2
+				y = y * self.SCALE + HEIGHT / 2
+				updated_points.append((x, y))
 
 		# 	# drawing the lines
-		# 	pygame.draw.lines(win, self.color, False, updated_points, 2)
+			pygame.draw.lines(win, self.color, False, updated_points, 2)
 
 		# pygame.draw.circle(win, self.color, (x, y), self.radius)
 		# scale the image with self.radius
@@ -195,6 +195,11 @@ def main():
 		for planet in planets:
 			planet.update_position(planets)
 			planet.draw(WIN)
+
+		print("Comet Halley: " + str(comet_halley.x) + "," + str(comet_halley.y))
+		print("Earth: " + str(earth.x) + "," + str(earth.y))
+		print("X difference: " + str(earth.x - comet_halley.x))
+		print("X difference: " + str(earth.y - comet_halley.y))
 
 		pygame.display.update()
 		# end = time.time()
