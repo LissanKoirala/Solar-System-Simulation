@@ -59,16 +59,16 @@ class Planet:
 
 		# uncomment to draw lines, however, the program will run slower over time
   
-		if len(self.orbit) > 2:
-			updated_points = []
-			for point in self.orbit:
-				x, y = point
-				x = x * self.SCALE + WIDTH / 2
-				y = y * self.SCALE + HEIGHT / 2
-				updated_points.append((x, y))
-
-		# 	# drawing the lines
-			pygame.draw.lines(win, self.color, False, updated_points, 2)
+		# if len(self.orbit) > 2:
+		# 	updated_points = []
+		# 	for point in self.orbit:
+		# 		x, y = point
+		# 		x = x * self.SCALE + WIDTH / 2
+		# 		y = y * self.SCALE + HEIGHT / 2
+		# 		updated_points.append((x, y))
+		#
+		# # 	# drawing the lines
+		# 	pygame.draw.lines(win, self.color, False, updated_points, 2)
 
 		# pygame.draw.circle(win, self.color, (x, y), self.radius)
 		# scale the image with self.radius
@@ -173,11 +173,12 @@ def main():
 
 
 
-	#f = open("just_with_lines.txt", "w")
+	f = open("distance_between.txt", "w")
 
-	#counter = 0
+	counter = 0
  
-	#list_of_times = []
+	list_of_times = []
+	distance_between = []
 
 	while run:
 
@@ -196,27 +197,24 @@ def main():
 			planet.update_position(planets)
 			planet.draw(WIN)
 
-		print("Comet Halley: " + str(comet_halley.x) + "," + str(comet_halley.y))
-		print("Earth: " + str(earth.x) + "," + str(earth.y))
-		print("X difference: " + str(earth.x - comet_halley.x))
-		print("X difference: " + str(earth.y - comet_halley.y))
+		# print("Comet Halley: " + str(comet_halley.x) + "," + str(comet_halley.y))
+		# print("Earth: " + str(earth.x) + "," + str(earth.y))
+
+		distance_between.append(str(math.sqrt((earth.x - comet_halley.x)**2 + (earth.y - comet_halley.y)**2)))
 
 		pygame.display.update()
 		# end = time.time()
 
-		#list_of_times.append(end-start)
-
-		# if counter > 30000:
-		# 	break
+		if counter > 50000:
+			break
 		
-		# counter += 1
-
+		counter += 1
 
 	pygame.quit()
+
 	
-    # writing into file
-	# for i in list_of_times:
-	# 	f.write(str(i)+"\n")
+	for i in distance_between:
+		f.write(i+"\n")
 
 	# f.close()
 

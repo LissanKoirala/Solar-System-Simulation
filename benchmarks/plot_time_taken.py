@@ -9,4 +9,6 @@ f.close()
 
 print("Plotting data")
 
-# get rolling average of data and plot it
+# plot data
+plt.plot(data)
+plt.savefig(name+".png")
