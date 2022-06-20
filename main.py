@@ -137,10 +137,12 @@ class Planet:
 		self.y += self.y_vel * self.TIMESTEP
 		self.orbit.append((self.x, self.y))
   
-	def draw_line(self, color, x_in, y_in):
+	def draw_line(self, win, color, x_in, y_in):
 		x = self.x * self.SCALE + WIDTH / 2
 		y = self.y * self.SCALE + HEIGHT / 2
-		pygame.draw.line(WIN, color, (x, y), (x + x_in, y + y_in), 1)
+		pygame.draw.line(win, color, (x, y), (x + x_in * 0.004, y+ x_in * 0.004), 5)
+
+  
 		
 
 
@@ -221,7 +223,7 @@ def main():
 		# WIN.fill((0, 0, 0))
 
 		# start = time.time()
-		WIN.blit(bg_img,(0,0))
+		#WIN.blit(bg_img,(0,0))
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -229,7 +231,7 @@ def main():
 
 		for planet in planets:
 			planet.update_position(planets)
-			planet.draw(WIN)
+			#planet.draw(WIN)
 
 		object = comet_halley
 		object2 = sun
@@ -259,20 +261,20 @@ def main():
 		# find resultant_speed_vector
 		resultant_speed_vector = speed_vector[1][0]-speed_vector[0][0], speed_vector[1][1]-speed_vector[0][1]
 
-		print("Resultant Vector: " + str(resultant_speed_vector))
+		# print("Resultant Vector: " + str(resultant_speed_vector))
 		
 		# TODO: instead of the distance to sun, use the focous
 
   
   
 		distance_to_sun = object.distance_to_sun
-		print(distance_to_sun)
+		# print(distance_to_sun)
 		# distance to sun vector for object
 		distance_to_sun_vector = ((object.x, object.y),(object.x + object.distance_to_sun_x, object.y + object.distance_to_sun_y))
   		# find distance_to_sun_vector
 		distance_to_sun_vector = distance_to_sun_vector[1][0]-distance_to_sun_vector[0][0], distance_to_sun_vector[1][1]-distance_to_sun_vector[0][1]
 
-		print("Distance Vector: " + str(distance_to_sun_vector))
+		# print("Distance Vector: " + str(distance_to_sun_vector))
   
   
 		# print("Distance to sun: " + str(object.distance_to_sun/149597871000))
@@ -281,16 +283,17 @@ def main():
   
 		###### TODO: Something is not right... #####
 		angle = math.acos((resultant_speed_vector[0]*distance_to_sun_vector[0] + resultant_speed_vector[1]*distance_to_sun_vector[1])/((math.sqrt(resultant_speed_vector[0]**2 + resultant_speed_vector[1]**2))*math.sqrt(distance_to_sun_vector[0]**2 + distance_to_sun_vector[1]**2)))
-
 		# convert angle to degrees
 		angle = angle * (180 / math.pi)
 	
-		print("Angle: " + str(angle))
-  
 
-		velocity_perpendicular_to_sun = speed_calc * angle # Resultant x sin theta
-		print("Velocity Perpendicular to Sun: " + str(velocity_perpendicular_to_sun))
-		object.draw_line(BLUE, object.x+velocity_perpendicular_to_sun, object.y+velocity_perpendicular_to_sun)
+		# calculating velocity_perpendicular_to_sun
+		# sin angle in degrees
+		sin_angle = math.sin(angle * (math.pi / 180))
+
+		velocity_perpendicular_to_sun = speed_calc * sin_angle # Resultant x sin theta
+		# print("Velocity Perpendicular to Sun: " + str(velocity_perpendicular_to_sun))
+		object.draw_line(WIN, BLUE, velocity_perpendicular_to_sun,velocity_perpendicular_to_sun)
   
 
 		area_swpet = 0.5*(distance_to_sun*velocity_perpendicular_to_sun*Planet.TIMESTEP)
@@ -317,7 +320,7 @@ def main():
 
 		distance_between.append(str(math.sqrt((object2.x - object.x)**2 + (object2.y - object.y)**2)))
 
-		pygame.display.update()
+		#pygame.display.update()
 
 
 		# end = time.time()
