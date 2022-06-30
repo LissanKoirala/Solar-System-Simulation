@@ -1,14 +1,14 @@
 formatSpec = '%f';
 
-fileID = fopen('comet_halley/distance_between.txt','r');
+fileID = fopen('distance_between.txt','r');
 data = fscanf(fileID,formatSpec);
 
-fileID = fopen('comet_halley/distance_only.csv','r');
-data1 = fscanf(fileID,formatSpec);
+% fileID = fopen('comet_halley/distance_only.csv','r');
+% data1 = fscanf(fileID,formatSpec);
 
 plot(data, 'r')
 title('Combine Plots')
 
-hold on
+% hold on
 
-plot(data1, 'g')
+%  plot(data1, 'g')

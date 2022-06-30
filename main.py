@@ -1,14 +1,11 @@
-from bdb import Breakpoint
-from itertools import count
-from turtle import speed
+from cgitb import grey
 import pygame
 import math
 import time
-import numpy as np
 
 pygame.init()
 
-WIDTH, HEIGHT =  800, 800
+WIDTH, HEIGHT =  1920, 1080
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Planet Simulation")
 
@@ -37,11 +34,11 @@ comet_image = pygame.image.load("media/comet.png")
 class Planet:
 	AU = 149.6e6 * 1000
 	G = 6.67428e-11
-	SCALE = 10 / AU  # 1AU = 100 pixels
+	SCALE = 90 / AU  # 1AU = 100 pixels
 	TIMESTEP = 3600*24 # 1 day
 	image = pygame.image.load('media/sun.png')
 
-	def __init__(self, x, y, radius, color, mass):
+	def __init__(self, x, y, radius, color, mass, max_lines_draw):
 		self.x = x
 		self.y = y
 		self.radius = radius
@@ -57,23 +54,26 @@ class Planet:
 		self.x_vel = 0
 		self.y_vel = 0
 
+		self.max_lines_draw = max_lines_draw
+
 
 	def draw(self, win):
 		x = self.x * self.SCALE + WIDTH / 2
 		y = self.y * self.SCALE + HEIGHT / 2
 
 		# uncomment to draw lines, however, the program will run slower over time#
-		# if len(self.orbit) > 2:
-		# 	updated_points = []
-		# 	for point in self.orbit:
-		# 		x, y = point
-		# 		x = x * self.SCALE + WIDTH / 2
-		# 		y = y * self.SCALE + HEIGHT / 2
-		# 		updated_points.append((x, y))
+		if len(self.orbit) > 2:
+			updated_points = []
+			for point in self.orbit:
+				x, y = point
+				x = x * self.SCALE + WIDTH / 2
+				y = y * self.SCALE + HEIGHT / 2
+				updated_points.append((x, y))
 				
 		
-		# # 	# drawing the lines
-		# 	pygame.draw.lines(win, self.color, False, updated_points, 1)
+		# 	# drawing the lines
+			updated_points = updated_points[-self.max_lines_draw:]
+			pygame.draw.lines(win, self.color, False, updated_points, 1)
    
 		# draw the resultant velocity
 		if not self.sun:
@@ -87,7 +87,7 @@ class Planet:
 				pygame.draw.line(win, WHITE, (x, y), (x, y + self.y_vel * 0.004), 2)
 
 				# draw a to the center of the sun
-				pygame.draw.line(win, DARK_GREY, (x, y), (400, 400), 2)
+				# pygame.draw.line(win, DARK_GREY, (x, y), (WIDTH / 2, HEIGHT / 2), 2)
 
 			
    
@@ -150,7 +150,7 @@ def main():
 	run = True
 	clock = pygame.time.Clock()
  
-	sun = Planet(0, 0, 20, YELLOW, 1.98892 * 10**30) 
+	sun = Planet(0, 0, 20, YELLOW, 1.98892 * 10**30, 0) 
 	sun.sun = True
 
 	# initializing planets
@@ -159,41 +159,41 @@ def main():
 	# planets are bigger than real in the graphics...
 	# https://thinkzone.wlonk.com/SS/SolarSystemModel.php?obj=Sun&dia=30cm&lat=51.483439&lon=0.105579&table=y&map=y
 
-	mercury = Planet(0.38709893 * Planet.AU, 0.0, 11, RED, 3.3011 * 10**23)
+	mercury = Planet(0.38709893 * Planet.AU, 0.0, 11, BLUE, 3.3011 * 10**23, 88)
 	mercury.image = mercury_image
 	mercury.y_vel = -47.36 * 1000
 
-	venus = Planet(0.72333566 * Planet.AU, 0.0, 12, BLUE, 4.867 * 10**24)
+	venus = Planet(0.72333566 * Planet.AU, 0.0, 12, RED, 4.867 * 10**24, 225)
 	venus.image = venus_image
 	venus.y_vel = -35.02 * 1000
 
-	earth = Planet(1.0 * Planet.AU, 0.0, 13, WHITE, 5.972 * 10**24)
+	earth = Planet(1.0 * Planet.AU, 0.0, 13, BLUE, 5.972 * 10**24, 365)
 	earth.image = earth_image
 	earth.y_vel = -29.78 * 1000
 
-	mars = Planet(1.52371034 * Planet.AU, 0.0, 15, RED, 6.4171 * 10**23)
+	mars = Planet(1.52371034 * Planet.AU, 0.0, 15, RED, 6.4171 * 10**23, 687)
 	mars.image = mars_image
 	mars.y_vel = -24.07 * 1000
 
-	jupiter = Planet(5.20336301 * Planet.AU, 0.0, 27, RED, 1.8982 * 10**27)
+	jupiter = Planet(5.20336301 * Planet.AU, 0.0, 27, BLUE, 1.8982 * 10**27, 4333)
 	jupiter.image = jupiter_image
 	jupiter.y_vel = -13.06 * 1000
 
-	saturn = Planet(9.53667594 * Planet.AU, 0.0, 24, BLUE, 5.6846 * 10**26)
+	saturn = Planet(9.53667594 * Planet.AU, 0.0, 24, RED, 5.6846 * 10**26, 10760)
 	saturn.image = saturn_image
 	saturn.y_vel = -9.68 * 1000
 
-	uranus = Planet(19.19126393 * Planet.AU, 0.0, 18, BLUE, 8.6832 * 10**25)
+	uranus = Planet(19.19126393 * Planet.AU, 0.0, 18, BLUE, 8.6832 * 10**25, 30690)
 	uranus.image = uranus_image
 	uranus.y_vel = -6.80 * 1000
 
-	neptune = Planet(30.06992276 * Planet.AU, 0.0, 19, BLUE, 1.0241 * 10**26)
+	neptune = Planet(30.06992276 * Planet.AU, 0.0, 19, BLUE, 1.0241 * 10**26, 60195)
 	neptune.image = neptune_image
 	neptune.y_vel = -5.43 * 1000
 
 	# comets
 
-	comet_halley = Planet(0.586 * Planet.AU, 0, 10, BLUE, 2.2 * 10**14) # x value perihelion
+	comet_halley = Planet(0.586 * Planet.AU, 0, 10, WHITE, 2.2 * 10**14, 27500) # x value perihelion
 	comet_halley.image = comet_image
 	comet_halley.y_vel = -54.55 * 1000 
 
@@ -203,8 +203,8 @@ def main():
 	# planets = list of planets
 	planets = [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune,     comet_halley]
 
-	bg_img = pygame.image.load('media/background1.jpg')
-	bg_img = pygame.transform.scale(bg_img,(800,800))
+	bg_img = pygame.image.load('media/background.jpg').convert()
+	bg_img = pygame.transform.scale(bg_img,(WIDTH,HEIGHT))
 
 
 
@@ -220,10 +220,10 @@ def main():
 
 		clock.tick(100000)
 
-		# WIN.fill((0, 0, 0))
+		#WIN.fill((0, 0, 0))
 
 		# start = time.time()
-		#WIN.blit(bg_img,(0,0))
+		WIN.blit(bg_img,(0,0))
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -231,9 +231,9 @@ def main():
 
 		for planet in planets:
 			planet.update_position(planets)
-			#planet.draw(WIN)
+			planet.draw(WIN)
 
-		object = comet_halley
+		object = comet_halley # so dynamic, just change of which you want to calculate!
 		object2 = sun
   
 		# print("X Vel: " + str(object.x_vel))
@@ -281,7 +281,7 @@ def main():
   
 		# angle between the two vectors resultant_speed_vector and distance_to_sun_vector
   
-		###### TODO: Something is not right... #####
+		###### TODO: Something is not right... ##### it's right now
 		angle = math.acos((resultant_speed_vector[0]*distance_to_sun_vector[0] + resultant_speed_vector[1]*distance_to_sun_vector[1])/((math.sqrt(resultant_speed_vector[0]**2 + resultant_speed_vector[1]**2))*math.sqrt(distance_to_sun_vector[0]**2 + distance_to_sun_vector[1]**2)))
 		# convert angle to degrees
 		angle = angle * (180 / math.pi)
@@ -293,7 +293,6 @@ def main():
 
 		velocity_perpendicular_to_sun = speed_calc * sin_angle # Resultant x sin theta
 		# print("Velocity Perpendicular to Sun: " + str(velocity_perpendicular_to_sun))
-		object.draw_line(WIN, BLUE, velocity_perpendicular_to_sun,velocity_perpendicular_to_sun)
   
 
 		area_swpet = 0.5*(distance_to_sun*velocity_perpendicular_to_sun*Planet.TIMESTEP)
@@ -320,10 +319,14 @@ def main():
 
 		distance_between.append(str(math.sqrt((object2.x - object.x)**2 + (object2.y - object.y)**2)))
 
-		#pygame.display.update()
+		pygame.display.update()
 
 
 		# end = time.time()
+
+		# if counter > 24500 and counter < 25500:
+		# 	# save pygame screenshot with counter as filename
+		# 	pygame.image.save(WIN, "screenshots/background/comet_halley_" + str(counter) + ".png")
 
 		if counter > 50000:
 			break
