@@ -27,6 +27,7 @@ jupiter_image = pygame.image.load("media/jupiter.png")
 saturn_image = pygame.image.load("media/saturn.png")
 uranus_image = pygame.image.load("media/uranus.png")
 neptune_image = pygame.image.load("media/neptune.png")
+pluto_image = pygame.image.load("media/pluto.png")
 comet_image = pygame.image.load("media/comet.png")
 
 
@@ -187,9 +188,14 @@ def main():
 	uranus.image = uranus_image
 	uranus.y_vel = -6.80 * 1000
 
-	neptune = Planet(30.06992276 * Planet.AU, 0.0, 19, BLUE, 1.0241 * 10**26, 60195)
+	neptune = Planet(30.06992276 * Planet.AU, 0.0, 19, RED, 1.0241 * 10**26, 60195)
 	neptune.image = neptune_image
 	neptune.y_vel = -5.43 * 1000
+
+	# well added pluto as it has some imapct on the grativational force as it's twice as massive as the comet.
+	pluto = Planet(39.48211675 * Planet.AU, 0.0, 5, BLUE, 1.3022 * 10**22, 90560)
+	pluto.image = pluto_image
+	pluto.y_vel = -4.74 * 1000
 
 	# comets
 
@@ -201,7 +207,7 @@ def main():
 
 
 	# planets = list of planets
-	planets = [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune,     comet_halley]
+	planets = [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto,     comet_halley]
 
 	bg_img = pygame.image.load('media/background.jpg').convert()
 	bg_img = pygame.transform.scale(bg_img,(WIDTH,HEIGHT))
@@ -215,6 +221,9 @@ def main():
 	area_covered = []
 	speed = []
 	to_save = []
+
+	# object_prev_x = 0
+	# object_prev_y = 0
 
 	while run:
 
@@ -235,6 +244,12 @@ def main():
 
 		object = comet_halley # so dynamic, just change of which you want to calculate!
 		object2 = sun
+
+		# if object_prev_x == 0 and object_prev_y == 0:
+		# 	object_prev_x = object.x
+		# 	object_prev_y = object.y
+
+
   
 		# print("X Vel: " + str(object.x_vel))
 		# print("Y Vel: " + str(object.y_vel))
@@ -299,7 +314,23 @@ def main():
 		# print("Area Covered: " + str(area_swpet))
 		area_covered.append(area_swpet)
 
-		to_save.append(str(velocity_perpendicular_to_sun) + "," + str(distance_to_sun) + "," + str(angle) + "," + str(area_swpet) + ",")
+
+
+		# # distance covered from previous point to new point for object, this is what we get if we integrate the velocity
+		# prev_point = (object_prev_x, object_prev_y)
+		# new_point = (object.x, object.y)
+		# # distance betwwen the two points
+		# distance_between_points = (new_point[0] - prev_point[0], new_point[1] - prev_point[1])
+		# distance_between_points = math.sqrt(distance_between_points[0]**2 + distance_between_points[1]**2)
+
+		# object_prev_x = object.x
+		# object_prev_y = object.y
+
+
+
+
+
+		to_save.append(str(speed_calc) + "," + str(distance_to_sun) + "," + str(angle) + "," + str(area_swpet) + ",")
 		
 
 		# calcluate the distance between object and the sun
@@ -317,7 +348,10 @@ def main():
 		# print("Comet Halley: " + str(object.x) + "," + str(object.y))
 		# print("Earth: " + str(earth.x) + "," + str(earth.y))
 
-		distance_between.append(str(math.sqrt((object2.x - object.x)**2 + (object2.y - object.y)**2)))
+		# distance_between.append(str(math.sqrt((object2.x - object.x)**2 + (object2.y - object.y)**2))) ## might want to use this
+		distance_between.append(distance_to_sun)
+
+
 
 		pygame.display.update()
 
@@ -328,7 +362,7 @@ def main():
 		# 	# save pygame screenshot with counter as filename
 		# 	pygame.image.save(WIN, "screenshots/background/comet_halley_" + str(counter) + ".png")
 
-		if counter > 50000:
+		if counter > 25593: # determined by looking at the data, this is the point when at the first orbit, when it reaches where it started
 			break
 
 		counter += 1
@@ -342,7 +376,7 @@ def main():
 
 	f = open("speed.txt", "w")
 	for i in speed:
-		f.write(str(i)+"\n")
+		f.write(str(abs(i)/1000)+"\n")
 	f.close()
  
  
